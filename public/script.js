@@ -5,7 +5,7 @@ document.getElementById('submit').onclick = function(e) {
 
     var xhr = new XMLHttpRequest();
 
-    xhr.open('POST', '/getfullurl');
+    xhr.open('POST', '/api/getfullurl');
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.responseType = 'json';
 
