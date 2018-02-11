@@ -34,7 +34,8 @@ router.post('/getshortened', (req, res, next) => {
 })
 
 router.get('/geturl', function(req, res, next){
-    urldbModel.find({shortened : req.query.inputHash}, (err, entry) => {
+    // findOne instead of find() since the db can have duplicate url:shortened entries
+    urldbModel.findOne({shortened : req.query.inputHash}, (err, entry) => {
         if (err || entry==null)
         {
             res.send({msg: 'Failed to get any Url ...' + req.body.inputHash});
@@ -42,16 +43,6 @@ router.get('/geturl', function(req, res, next){
         res.json("This is found: " + entry);
     })
 });
-
-// router.get('/geturl:hash', function(req, res, next){
-//     urldbModel.findOne({'shortened' : req.params.hash}, (err, url) => {
-//         if (err)
-//         {
-//             res.send({msg: 'Failed to get any Url ...'})
-//         }
-//         res.json(url);
-//     })
-// });
 
 router.get('/getallurls', function(req, res, next){
     urldbModel.find((err, urls) => {
