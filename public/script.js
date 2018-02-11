@@ -21,9 +21,9 @@ document.getElementById('submitHash').onclick = (e) => {
     e.preventDefault();
 
     let xhr = new XMLHttpRequest();
-    //let requestString =  '/api/geturl/' + document.getElementById("inputHash").value
+    let requestString =  '/api/geturl?inputHash=' + document.getElementById("inputHash").value
 
-    xhr.open('GET', '/api/geturl');
+    xhr.open('GET', requestString);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.responseType = 'json';
 
@@ -31,6 +31,5 @@ document.getElementById('submitHash').onclick = (e) => {
         alert(xhr.response);
     };
 
-    var info = JSON.stringify({inputHash: document.getElementById("inputHash").value}); 
-    xhr.send(info);
+    xhr.send();
 }

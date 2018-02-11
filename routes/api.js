@@ -34,7 +34,7 @@ router.post('/getshortened', (req, res, next) => {
 })
 
 router.get('/geturl', function(req, res, next){
-    urldbModel.find({shortened : '879422794'/*req.body.inputHash*/}, (err, entry) => {
+    urldbModel.find({shortened : req.query.inputHash}, (err, entry) => {
         if (err || entry==null)
         {
             res.send({msg: 'Failed to get any Url ...' + req.body.inputHash});
