@@ -4,8 +4,8 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var app = express();
 
-// Databse
-mongoose.connect('mongodb://localhost:27017/urlshortner');
+// Database
+mongoose.connect(process.env.DB_CONNECTION_URL || 'mongodb://localhost:27017/urlshortner');
 mongoose.connection.on('connected', ()=> {
     console.log('Connected to mongodb @27017');
 })

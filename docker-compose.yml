@@ -1,0 +1,14 @@
+version: "3.3"
+services:
+  db:
+    image: mongo
+    ports:
+      - "$STORAGE_PORT:27017"
+#  web:
+#    build: .
+#    ports:
+#      - "$WEB_PORT:4000"
+#    environment:
+#      - DB_CONNECTION_URL=mongodb://db/urlshortner
+#    depends_on:
+#      - db
