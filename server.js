@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 var app = express();
 
 // Database
-mongoose.connect(process.env.DB_CONNECTION_URL || 'mongodb://localhost:27017/urlshortner');
+mongoose.connect(process.env.CUSTOMCONNSTR_dbconnectionUrl || 'mongodb://localhost:27017/urlshortner');
 mongoose.connection.on('connected', ()=> {
     console.log('Connected to mongodb @27017');
 })
