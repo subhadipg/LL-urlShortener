@@ -29,7 +29,10 @@ router.post('/getshortened', (req, res, next) => {
         {
             res.send({msg: 'Failed to add Url entry'});
         }
-        res.json("This is in the db now: " + entry);
+        else
+        {
+            res.json("This is in the db now: " + entry);
+        }
     });
 })
 
@@ -40,7 +43,10 @@ router.get('/geturl', function(req, res, next){
         {
             res.send({msg: 'Failed to get any Url ...' + req.body.inputHash});
         }
-        res.json("This is found: " + entry);
+        else
+        {
+            res.json("This is found: " + entry);
+        }
     })
 });
 
@@ -50,7 +56,10 @@ router.get('/getallurls', function(req, res, next){
         {
             res.send({msg: 'Failed to get all Urls'})
         }
-        res.json(urls);
+        else
+        {
+            res.json(urls);
+        }
     })
 });
 
