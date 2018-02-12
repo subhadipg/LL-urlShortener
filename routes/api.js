@@ -1,65 +1,37 @@
-var express = require('express');
-var router = express.Router();
-var urldbModel = require('../dbModels/url');
+const express = require('express');
+const router = express.Router();
+const UrlModel = require('../dbModels/url');
 
-// http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
-String.prototype.hashCode = function() {
-    let hash = 0;
-    if (this.length == 0) {
-        return hash;
-    }
-    for (var i = 0; i < this.length; i++) {
-        char = this.charCodeAt(i);
-        hash = ((hash<<5)-hash)+char;
-        hash = hash & hash; // Convert to 32bit integer
-    }
-    return hash;
-}
-
-router.post('/getshortened', (req, res, next) => {
-    let inputUrl = req.body.inputUrl;
-    let shortenedUrl = inputUrl.hashCode();
-    let newUrl = new urldbModel({
-        url: inputUrl,
-        shortened: shortenedUrl
-    });
-
-    newUrl.save((err, entry) =>{
-        if (err)
-        {
-            res.send({msg: 'Failed to add Url entry'});
+router.post('/url', (req, res, next) => {
+    let url = req.body.url;
+    UrlModel.findByUrl(url, (err, existingEntry) => {
+        if (existingEntry) {
+            console.log(existingEntry, existingEntry.id, existingEntry.shortUrl)
+            res.send(`"${url}" already maps to "${existingEntry.shortUrl}"`);
+            return;
         }
-        res.json("This is in the db now: " + entry);
+
+        let newUrl = new UrlModel({ url });
+        newUrl.save((err, newEntry) => {
+            if (err) {
+                res.err(err);
+                return;
+            }
+            
+        res.send(`"${newEntry.url}" now maps to "${newEntry.shortUrl}"`);
+        });
     });
 })
 
-router.get('/geturl', function(req, res, next){
-    urldbModel.find({shortened : req.query.inputHash}, (err, entry) => {
-        if (err || entry==null)
-        {
-            res.send({msg: 'Failed to get any Url ...' + req.body.inputHash});
+router.get('/url', function(req, res, next){
+    var shortUrl = req.query.shortUrl;
+    UrlModel.findByShortUrl(shortUrl, (err, existingEntry) => {
+        if (err || !existingEntry) {
+            res.send({ msg: `Failed to find a mapping for "${shortUrl}"` });
+            return;
         }
-        res.json("This is found: " + entry);
-    })
-});
 
-// router.get('/geturl:hash', function(req, res, next){
-//     urldbModel.findOne({'shortened' : req.params.hash}, (err, url) => {
-//         if (err)
-//         {
-//             res.send({msg: 'Failed to get any Url ...'})
-//         }
-//         res.json(url);
-//     })
-// });
-
-router.get('/getallurls', function(req, res, next){
-    urldbModel.find((err, urls) => {
-        if (err)
-        {
-            res.send({msg: 'Failed to get all Urls'})
-        }
-        res.json(urls);
+        res.send(`"${shortUrl}" maps to "${existingEntry.url}"`);
     })
 });
 

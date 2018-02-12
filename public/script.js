@@ -1,35 +1,11 @@
-alert('Welcome to Super Duper Useless Shortening Service');
+window.onload = () => {
+    $('#submitURL').click(function () {
+        $.post('/api/url', {
+            url: $("#inputURL").val()
+        }, console.log);
+    });
 
-document.getElementById('submitURL').onclick = (e) => {
-    e.preventDefault();
-
-    let xhr = new XMLHttpRequest();
-
-    xhr.open('POST', '/api/getshortened');
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.responseType = 'json';
-
-    xhr.onload = function() {
-        alert(xhr.response);
-    };
-
-    var info = JSON.stringify({inputUrl: document.getElementById("inputURL").value}); 
-    xhr.send(info);
-}
-
-document.getElementById('submitHash').onclick = (e) => {
-    e.preventDefault();
-
-    let xhr = new XMLHttpRequest();
-    let requestString =  '/api/geturl?inputHash=' + document.getElementById("inputHash").value
-
-    xhr.open('GET', requestString);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.responseType = 'json';
-
-    xhr.onload = function() {
-        alert(xhr.response);
-    };
-
-    xhr.send();
-}
+    $('#submitHash').click(function () {
+        $.get('/api/url?shortUrl=' + $("#inputHash").val(), console.log);
+    });
+};
