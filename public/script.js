@@ -1,11 +1,13 @@
 window.onload = () => {
-    $('#submitURL').click(function () {
-        $.post('/api/url', {
-            url: $("#inputURL").val()
-        }, console.log);
-    });
-
-    $('#submitHash').click(function () {
-        $.get('/api/url?shortUrl=' + $("#inputHash").val(), console.log);
+    $('#shorten').click(function () {
+        $.post('/api/shorten', {
+            url: $("#inputUrl").val()
+        }, (result) => {
+            console.log(result);
+            $("#results").append("<tr><td>" +
+                `<a href="${result.url}">${result.url}</a></td>` +
+                `<td><a href="${window.location}${result.shortUrl}">${window.location}${result.shortUrl}</a>` +
+                "</td></tr>");
+        });
     });
 };

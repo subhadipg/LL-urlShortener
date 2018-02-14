@@ -28,10 +28,7 @@ app.set('views', path.resolve(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Routing logic
-var index = require('./routes/index');
-app.use('/', index);
-var api = require('./routes/api');
-app.use('/api', api);
-
+app.use('/api', require('./routes/api'));
+app.use('/', require('./routes/index'));
 
 app.listen(process.env.PORT || 4000, () => console.log('Started listening!'))
