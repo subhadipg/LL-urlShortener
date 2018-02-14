@@ -30,4 +30,15 @@ router.post('/shorten', (req, res, next) => {
     });
 });
 
+router.get('/all', function(req, res, next) {
+    UrlModel.find((err, urls) => {
+        if (err) {
+            res.send({ msg: 'Failed to get all urls', err });
+            return;
+        }
+
+        res.json(urls);
+    })
+});
+
 module.exports = router;

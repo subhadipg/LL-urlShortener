@@ -9,6 +9,6 @@ services:
 #    ports:
 #      - "$WEB_PORT:4000"
 #    environment:
-#      - DB_CONNECTION_URL=mongodb://db/urlshortner
+#      - CUSTOMCONNSTR_dbconnectionUrl=mongodb://db/urlshortner
 #    depends_on:
 #      - db
