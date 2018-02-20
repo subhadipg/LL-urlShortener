@@ -1,20 +1,37 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>My new app</title>
+        <title>URL Shortener</title>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script src="script.js"></script>
+        <style type="text/css">
+            body {
+                width: 100%;
+            }
+            
+            #main {
+                margin: auto;
+                text-align: center;
+                vertical-align: middle;
+            }
+
+            button {
+                color: #FFF;
+                background: #000;
+                padding: 10px;
+                display: inline-block;
+            }
+        </style>
     </head>
     <body>
-        <p>This page was rendered at <%= new Date() %>!</p>
-        <p>Enter Url to shorten</p>
-        Your url: <input type="url" id="inputURL" value="www.bing.com">
-        <button id="submitURL">Get shortened url!</button>
+        <div id="main">
+            <div>
+                <div>Get a shortened URL</div>
+                <input type="url" id="inputUrl" value="www.bing.com">
+                <button id="shorten">shorten</button>
+            </div>
 
-        <br></br>
-
-        <p>Enter Hash to decrypt</p>
-        Your url: <input id="inputHash" value="879422794">
-        <button id="submitHash">Get url!</button>
-
-        <script src="script.js"></script>
+            <table id="results" />
+        </div>
     </body>
 </html>

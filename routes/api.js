@@ -1,65 +1,43 @@
-var express = require('express');
-var router = express.Router();
-var urldbModel = require('../dbModels/url');
+const express = require('express');
+const router = express.Router();
+const UrlModel = require('../dbModels/url');
 
-// http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
-String.prototype.hashCode = function() {
-    let hash = 0;
-    if (this.length == 0) {
-        return hash;
-    }
-    for (var i = 0; i < this.length; i++) {
-        char = this.charCodeAt(i);
-        hash = ((hash<<5)-hash)+char;
-        hash = hash & hash; // Convert to 32bit integer
-    }
-    return hash;
-}
+router.post('/shorten', (req, res, next) => {
+    let url = req.body.url;
+    UrlModel.findByUrl(url, (err, existingEntry) => {
+        if (existingEntry) {
+            console.log(existingEntry, existingEntry.id, existingEntry.shortUrl)
+            res.json({
+                message: `"${url}" already maps to "${existingEntry.shortUrl}"`,
+                url,
+                shortUrl: existingEntry.shortUrl
+            });
+            return;
+        }
 
-router.post('/getshortened', (req, res, next) => {
-    let inputUrl = req.body.inputUrl;
-    let shortenedUrl = inputUrl.hashCode();
-    let newUrl = new urldbModel({
-        url: inputUrl,
-        shortened: shortenedUrl
+        let newUrl = new UrlModel({ url });
+        newUrl.save((err, newEntry) => {
+            if (err) {
+                res.json(err);
+                return;
+            }
+            
+            res.json({
+                url,
+                shortUrl: newEntry.shortUrl
+            });
+        });
     });
-
-    newUrl.save((err, entry) =>{
-        if (err)
-        {
-            res.send({msg: 'Failed to add Url entry'});
-        }
-        else
-        {
-            res.json("This is in the db now: " + entry);
-        }
-    });
-})
-
-router.get('/geturl', function(req, res, next){
-    // findOne instead of find() since the db can have duplicate url:shortened entries
-    urldbModel.findOne({shortened : req.query.inputHash}, (err, entry) => {
-        if (err || entry==null)
-        {
-            res.send({msg: 'Failed to get any Url ...' + req.body.inputHash});
-        }
-        else
-        {
-            res.json("This is found: " + entry);
-        }
-    })
 });
 
-router.get('/getallurls', function(req, res, next){
-    urldbModel.find((err, urls) => {
-        if (err)
-        {
-            res.send({msg: 'Failed to get all Urls'})
+router.get('/all', function(req, res, next) {
+    UrlModel.find((err, urls) => {
+        if (err) {
+            res.send({ msg: 'Failed to get all urls', err });
+            return;
         }
-        else
-        {
-            res.json(urls);
-        }
+
+        res.json(urls);
     })
 });
 
